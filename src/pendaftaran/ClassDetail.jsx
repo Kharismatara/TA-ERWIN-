@@ -15,7 +15,7 @@ function FormFloatingCustom() {
   const [newJurusan, setNewJurusan] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedClass, setSelectedClass] = useState('');
-
+  const jurusanOptions = ['Jurusan A', 'Jurusan B', 'Jurusan C'];
   const [classes, setClasses] = useState([]);
   const [notification, setNotification] = useState({ variant: '', message: '' });
   const [showCard, setShowCard] = useState(false);
@@ -217,7 +217,6 @@ function FormFloatingCustom() {
                 />
                 <Form.Label style={{ fontSize: '12px', textAlign: 'left' }}>Unggah Bukti Pembayaran</Form.Label>
               </Form.Floating>
-
               <Button onClick={createUser} style={{ fontSize: '14px', width: '99px' }}>
                 Tambah +
               </Button>

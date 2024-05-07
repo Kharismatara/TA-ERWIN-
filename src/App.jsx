@@ -1,77 +1,29 @@
-import { useState, useEffect } from "react";
-import Dahboard from './dahboard'
-import JPelatihan from './j-Pelatihan/JadwalPelatihan'
-import JUjian from './jadwal/JadwalUjian'
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Dahboard from './dahboard';
+import JPelatihan from './j-Pelatihan/JadwalPelatihan';
+import JUjian from './jadwal/JadwalUjian';
+import Regis from './Auth/register';
 import Admin from './Admin/com-admin';
+import ClassAdmin from './Admin/classAdmin';
 import GoogleLogin from './Auth/login';
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
-
-
+import User from "./sertifikat/user";
+import ClassDetail from "./pendaftaran/ClassDetail";
 function App() {
-
-  const [loading, setLoading] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-
-
-  useEffect(() => {
-    const auth = getAuth();
-
-    const unsubscribe = onAuthStateChanged(auth, (result) => {
-      if (result) {
-        const isAdminUser = result.email === 'adminupt@gmail.com';
-        setIsAdmin(isAdminUser);
-        setIsLoggedIn(true);
-        console.log(result.email);
-      } else {
-        setIsLoggedIn(false);
-        
-      }
-
-      setLoading(false);
-    });
-
-    // Fungsi pembersihan untuk berhenti berlangganan dari listener perubahan status otentikasi
-    return () => unsubscribe();
-  }, []);
-
-  if (loading) {
-    // Anda dapat menambahkan spinner atau pesan loading di sini
-    return <div>Loading...</div>;
-  }
-
   return (
-    <div>
-      {isLoggedIn ? (
-        <Router>
-          <Routes>
-            {isAdmin ? (
-                <Route path="/admin" element={<Admin />} />
-            ):(
-                <Route path="/dashboard" element={<Dahboard />} />
-            )}
-           
-            <Route path="/dashboard" element={<Dahboard />} />
-            <Route path="/jadwal-pelatihan" element={<JPelatihan />} />
-            <Route path="/jadwal-ujian" element={<JUjian />} />
-            {/* Tambahkan rute lain sesuai kebutuhan */}
-          </Routes>
-        </Router>
-      ) : (
-        <Router>
-          <Routes>
-            <Route path="/" element={<GoogleLogin />} />
-            {/* Tambahkan rute lain sesuai kebutuhan */}
-          </Routes>
-        </Router>
-      )}
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<GoogleLogin />} />
+        <Route path="/register" element={<Regis />} />
+        <Route path="/dashboard" element={<Dahboard />} />
+        <Route path="/class/:id" element={<ClassDetail />} />
+        <Route path="/jadwal-pelatihan" element={<JPelatihan />} />
+        <Route path="/jadwal-ujian" element={<JUjian />} />
+        <Route path="/sertifikat" element={<User />} />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/class-admin" element={<ClassAdmin />} />
+        
+      </Routes>
+    </Router>
   );
 }
 

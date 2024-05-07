@@ -1,5 +1,4 @@
-// Admin component
-
+// Admin.js
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, deleteDoc, updateDoc, doc } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
@@ -16,7 +15,6 @@ function Admin() {
   const [selectedImage, setSelectedImage] = useState('');
   const [selectedUser, setSelectedUser] = useState(null);
   const [certificateFile, setCertificateFile] = useState(null);
-  const [searchKeyword, setSearchKeyword] = useState('');
 
   const usersCollectionRef = collection(db, 'pendaftaran');
 
@@ -106,106 +104,57 @@ function Admin() {
     a.click();
   };
 
-  // Filter users based on searchKeyword
-  const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(searchKeyword.toLowerCase())
-  );
-
   return (
     <div className='admin-body'>
-      <h2>Data Pendaftar</h2>
-      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
-        <input
-          type='text'
-          placeholder='Cari berdasarkan nama'
-          value={searchKeyword}
-          onChange={(e) => setSearchKeyword(e.target.value)}
-        />
-      </div>
-      <Table striped bordered hover style={{ marginTop: '0px' }}>
-        <thead>
-          <tr>
-            <th>Nama</th>
-            <th>Alamat</th>
-            <th>Phone</th>
-            <th>NIM</th>
-            <th>Tempat Tanggal Lahir</th>
-            <th>Jurusan</th>
-            <th>Gambar Bukti Pembayaran</th>
-            <th>Sertifikat</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredUsers.map((user) => (
-            <tr key={user.id}>
-              <td>{user.name}</td>
-              <td>{user.Alamat}</td>
-              <td>{user.phone}</td>
-              <td>{user.NIM}</td>
-              <td>{user.TempatTanggalLahir}</td>
-              <td>{user.Jurusan}</td>
-              <td>
-                {user.imageUrl && (
-                  <img
-                    src={user.imageUrl}
-                    alt='Bukti Pembayaran'
-                    style={{ maxWidth: '100%', maxHeight: '50px', cursor: 'pointer' }}
-                    onClick={() => handleImageAndCertificateClick(user)}
-                  />
-                )}
-              </td>
-              <td>
-                {user.certificateUrl && (
-                  <a
-                    href={user.certificateUrl}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    onClick={(e) => {
-                      e.preventDefault();
-                      lihatSertifikat(user.certificateUrl);
-                    }}
-                  >
-                    Lihat Sertifikat
-                  </a>
-                )}
-              </td>
-              <td>
-                <input
-                  type='file'
-                  accept='application/pdf'
-                  onChange={(e) => {
-                    setCertificateFile(e.target.files[0]);
-                    setSelectedUser(user);
-                  }}
-                />
-                <Button variant='success' onClick={handleUploadCertificate}>
-                  Unggah Sertifikat
-                </Button>
-              </td>
-              {/* Add delete button */}
-              <td>
-                <Button variant='danger' onClick={() => handleDelete(user.id)}>
-                  Hapus
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Gambar Bukti Pembayaran</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <img src={selectedImage} alt='Bukti Pembayaran' style={{ width: '100%' }} />
-        </Modal.Body>
-      </Modal>
-      <Button variant='primary' onClick={exportToExcel}>
-        Ekspor ke Excel
-      </Button>
+        iki userrr
+      <Card
+        className='mb-2'
+        style={{
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+          borderRadius: '25px',
+          padding: '20px',
+          marginTop: '20px',
+        }}
+      >
+        <Card.Body style={{ textAlign: 'left' }}>
+          <h2>Data Pendaftar</h2>
+          <Table striped bordered hover style={{ marginTop: '0px' }}>
+            <thead>
+              <tr>
+             
+                <th>Sertifikat</th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr key={user.id}>
+                
+                  <td>
+                    {user.certificateUrl && (
+                      <a
+                        href={user.certificateUrl}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        onClick={(e) => {
+                          e.preventDefault();
+                          lihatSertifikat(user.certificateUrl);
+                        }}
+                      >
+                        Lihat Sertifikat
+                      </a>
+                    )}
+                  </td>
+                 
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        
+        </Card.Body>
+      </Card>
+     
       <button onClick={handleLogout}>Logout</button>
-      <Link to="/class-admin">Go to Class Admin Page</Link> {/* Add this line for navigation */}
     </div>
   );
 }

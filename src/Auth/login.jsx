@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../API/fire';
-import { Form, Button, Alert } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { Form, Button, Alert, Card } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../componen/navbar";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -14,60 +13,72 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      // Memeriksa apakah pengguna adalah "adminUPT" dengan email yang sesuai
-      if (email === 'adminupt@gmail.com') {
-        // Jika sesuai, login user sebagai admin
-        await signInWithEmailAndPassword(auth, email, password); // Melakukan login sebagai admin
+      // Kirim permintaan ke API SSO
+      const response = await fetch("https://dummyjson.com/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: "kminchelle",
+          password: "0lelplR",
+        }),
+      });
 
-        // Bersihkan kesalahan sebelumnya
-        setError(null);
-
-        // Simpan status login di localStorage
-        localStorage.setItem('isLogin', 'true');
-        localStorage.setItem('isAdmin', 'true');
-
-        // Alihkan ke halaman admin
-        navigate('/admin');
-      } else {
-        // Jika bukan admin, login user dengan email dan password
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-
-        // Bersihkan kesalahan sebelumnya
-        setError(null);
-
-        // Simpan status login di localStorage
-        localStorage.setItem('isLogin', 'true');
-        localStorage.setItem('isAdmin', 'false');
-
-        // Alihkan ke dasbor setelah login berhasil
-        navigate('/dashboard');
+      if (!response.ok) {
+        // Tangani jika respon tidak berhasil
+        throw new Error("Invalid credentials. Please try again.");
       }
+
+      // Jika respon berhasil, lanjutkan dengan login
+      const userData = await response.json();
+
+      // Simpan data pengguna ke localStorage jika perlu
+      localStorage.setItem("userData", JSON.stringify(userData));
+
+      // Bersihkan kesalahan sebelumnya
+      setError(null);
+
+      // Simpan status login di localStorage
+      localStorage.setItem("isLoggedIn", "true");
+
+      // Alihkan ke halaman dashboard setelah login berhasil
+      navigate("/dashboard");
     } catch (error) {
       setError(error.message);
     }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <Form>
-        <Form.Group controlId="formEmail">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control type="text" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)} />
-        </Form.Group>
+    <>
+      <div>
+        <Navbar />
+      </div>
+      <Card style={{ minWidth: "30rem", width: "100%", marginLeft: "auto", marginRight: "auto" }} className="mt-5">
+        <Card.Body style={{ minWidth: "20rem" }}>
+          <Card.Title>
+            <h2>Login</h2>
+          </Card.Title>
+          <Form>
+            <Form.Group controlId="formUsername">
+              <Form.Label>Username</Form.Label>
+              <Form.Control type="text" placeholder="Enter username" onChange={(e) => setUsername(e.target.value)} />
+            </Form.Group>
 
-        <Form.Group controlId="formPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-        </Form.Group>
+            <Form.Group controlId="formPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+            </Form.Group>
 
-        {error && <Alert variant="danger">{error}</Alert>}
+            {error && <Alert variant="danger">{error}</Alert>}
 
-        <Button variant="primary" type="submit" onClick={handleLogin}>
-          Login
-        </Button>
-      </Form>
-    </div>
+            <Button variant="primary" type="submit" onClick={handleLogin} className="mt-3">
+              Login
+            </Button>
+          </Form>
+        </Card.Body>
+      </Card>
+    </>
   );
 };
 

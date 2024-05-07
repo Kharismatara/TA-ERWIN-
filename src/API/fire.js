@@ -5,12 +5,12 @@ import 'firebase/auth'
 import { getStorage } from 'firebase/storage'
 import {getFirestore} from 'firebase/firestore'
 var firebaseConfig = {
-  apiKey: "AIzaSyDCMAzIdC01eDXCbnNU-ze_5Jl0H9a2NRk",
-  authDomain: "ta-alvin.firebaseapp.com",
-  projectId: "ta-alvin",
-  storageBucket: "ta-alvin.appspot.com",
-  messagingSenderId: "628405821146",
-  appId: "1:628405821146:web:eca4c54909ad9899500fe3"
+  apiKey: "AIzaSyBPerCmfbyPgapRimuQkcmrmeiQOiI2sBE",
+  authDomain: "tess-40ba4.firebaseapp.com",
+  projectId: "tess-40ba4",
+  storageBucket: "tess-40ba4.appspot.com",
+  messagingSenderId: "999010884419",
+  appId: "1:999010884419:web:00adb501a1fe533059adf6"
 };
 
 
