@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { collection, getDocs, where, query } from 'firebase/firestore';
-import { db } from '../API/fire';
-import { Card, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { collection, getDocs, where, query } from "firebase/firestore";
+import { db } from "../API/fire";
+import { Card, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 function User() {
   const [classes, setClasses] = useState([]);
@@ -11,18 +11,18 @@ function User() {
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const classesCollectionRef = collection(db, 'classes');
+        const classesCollectionRef = collection(db, "classes");
         const querySnapshot = await getDocs(classesCollectionRef);
         const data = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         setClasses(data);
       } catch (error) {
-        console.error('Error fetching classes:', error);
+        console.error("Error fetching classes:", error);
       }
     };
     fetchClasses();
 
     const fetchRegistrations = async () => {
-      const pendaftaranCollectionRef = collection(db, 'pendaftaran');
+      const pendaftaranCollectionRef = collection(db, "pendaftaran");
       const querySnapshot = await getDocs(pendaftaranCollectionRef);
       const data = {};
       querySnapshot.forEach((doc) => {
@@ -47,11 +47,11 @@ function User() {
   };
 
   return (
-    <div className='user-body'>
-      <h2 style={{textAlign:'center'}}>Daftar Kelas</h2>
-      <div className="d-flex flex-wrap justify-content-start">
+    <div className="user-body">
+      <h2 style={{ textAlign: "center" }}>Daftar Kelas</h2>
+      <div className="d-flex flex-wrap justify-content-between">
         {classes.map((kelas) => (
-          <Card key={kelas.id} className="m-2" style={{width:'250px'}}>
+          <Card key={kelas.id} className="m-2" style={{ width: "250px" }}>
             <Card.Body>
               <Card.Title>{kelas.className}</Card.Title>
               <hr />
@@ -62,7 +62,7 @@ function User() {
                 <strong>Jumlah Pendaftar:</strong> {registrations[kelas.id] || 0}
               </Card.Text>
               {!handleCheckQuota(kelas.id, kelas.kuota) ? (
-                <div style={{border:'5px', color:'red'}}>Kelas Penuh</div>
+                <div style={{ border: "5px", color: "red" }}>Kelas Penuh</div>
               ) : (
                 <Link to={`/class/${kelas.id}`}>
                   <Button variant="primary">Masuk Kelas</Button>
