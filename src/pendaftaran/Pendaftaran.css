@@ -1,0 +1,21 @@
+.card-transition-enter {
+    opacity: 0;
+    margin-top: -20px;
+  }
+  
+  .card-transition-enter-active {
+    opacity: 1;
+    margin-top: 0;
+    transition: opacity 500ms, margin-top 500ms;
+  }
+  
+  .card-transition-exit {
+    opacity: 1;
+  }
+  
+  .card-transition-exit-active {
+    opacity: 0;
+    margin-top: -20px;
+    transition: opacity 500ms, margin-top 500ms;
+  }
+  
